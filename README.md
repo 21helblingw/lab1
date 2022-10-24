@@ -24,7 +24,7 @@ gcc consumer.c -pthread -lrt -o consumer
 ## Documentation
 The producer program should always run first because it initializes the shared memory and initializes the semaphore used to ensure synchronization. The producer also is the first to access the shared memory and sets the in, out, and buffer variables to 0. These are used to know where and how many items are in the buffer. The producer and the consumer both print when they are waiting to enter their critical section and when they are leaving their critical sections. The producer also prints what it is producing and the consumer prints what is consumed from the shared memory. 
 ## Example
-```bash
+```code
 starting process P
 P in Critial to start and init variables
 ... P Leaving Critial from start
