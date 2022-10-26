@@ -23,10 +23,9 @@ int main(){
     if (fd == -1) printf("FAILED FD\n");
     // truncates the size of the file discripter to the size of the buffer structure
     if(ftruncate(fd, sizeof(struct buffer)) == -1) printf("FAILED TRUNCATE\n");
-    //printf("C: created the fd\n");
+ 
     // maps shm_map, which is the buffer structure , to the shared memory
     struct buffer *shm_map = mmap(NULL, sizeof(*shm_map), PROT_READ | PROT_WRITE, MAP_SHARED, fd,0);
-    printf("C: created the buffer map\n");
     // checks to make sure the mapping worked
     if(shm_map == MAP_FAILED){
         printf("FAILED MAPPING\n");
@@ -39,13 +38,12 @@ int main(){
     while(counter < 5){
         // allows for the two processes to take turns in thir critial sections
         sleep(1);
-        printf("C is waiting on critial section\n");
+        printf("C is waiting on critical section\n");
         // waits until the producer is finished in critial section
         // will also wait untl the producer has initialized the variables
         sem_wait(&shm_map->sem);
         // in critial section
-        //printf("C in Critial\n");
-
+        
         // if the buffer is not empty or full
         // consume and print an item in the buffer and replace it with 0
         // decreases the buffer item counter and increases the out so it points to the next possible full item
@@ -59,11 +57,11 @@ int main(){
         }
         else{
             // if the buffer is empty, wait a while and check again
-            sleep(1);
-            //printf("\tC-> nothing to consume\n");
+            //sleep(1);
+            printf("\tC-> nothing to consume\n");
             ++flag;
         }
-        //printf("...C Leaving Critial\n");
+        printf("...C Leaving Critical\n");
         sem_post(&shm_map->sem);
     }
 

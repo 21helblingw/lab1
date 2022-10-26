@@ -34,32 +34,83 @@ After the consumer connects to the shared memory, it waits on the semaphore, whi
 ### Issues
 A drawback to this implementation is that the producer has to run first in order to initialize the semaphore. If the consumer runs first, then it will wait on a semaphore that has not been initialized yet. 
 ## Example
+### Example 1:
 ```code
 starting process P
-P in Critial to start and init variables
+P in critical to start and initialize variables
 ... P Leaving Critial from start
-P is waiting on critial section
+P is waiting on critical section
 	P-> adding 0 to buffer
+... P Leaving Critial from store mem
 starting process C
-C: created the buffer map
-P is waiting on critial section
+P is waiting on critical section
 	P-> adding 1 to buffer
-C is waiting on critial section
+... P Leaving Critial from store mem
+C is waiting on critical section
 	C-> printing: 0
-P is waiting on critial section
-	P-> adding 2 to buffer
-C is waiting on critial section
+...C Leaving Critical
+C is waiting on critical section
 	C-> printing: 1
-P is waiting on critial section
-	P-> adding 3 to buffer
-C is waiting on critial section
+...C Leaving Critical
+P is waiting on critical section
+	P-> adding 2 to buffer
+... P Leaving Critial from store mem
+C is waiting on critical section
 	C-> printing: 2
-P is waiting on critial section
-	P-> adding 4 to buffer
-exiting process p
-C is waiting on critial section
+...C Leaving Critical
+P is waiting on critical section
+	P-> adding 3 to buffer
+... P Leaving Critial from store mem
+C is waiting on critical section
 	C-> printing: 3
-C is waiting on critial section
+...C Leaving Critical
+P is waiting on critical section
+	P-> adding 4 to buffer
+... P Leaving Critial from store mem
+exiting process p
+C is waiting on critical section
 	C-> printing: 4
+...C Leaving Critical
 exiting process c
 ```
+### Example 2:
+```code
+starting process P
+P in critical to start and initialize variables
+... P Leaving Critial from start
+P is waiting on critical section
+	P-> adding 0 to buffer
+... P Leaving Critial from store mem
+starting process C
+P is waiting on critical section
+C is waiting on critical section
+	P-> adding 1 to buffer
+... P Leaving Critial from store mem
+	C-> printing: 0
+...C Leaving Critical
+P is waiting on critical section
+	P-> adding 2 to buffer
+... P Leaving Critial from store mem
+C is waiting on critical section
+	C-> printing: 1
+...C Leaving Critical
+P is waiting on critical section
+	P-> adding 3 to buffer
+... P Leaving Critial from store mem
+C is waiting on critical section
+	C-> printing: 2
+...C Leaving Critical
+P is waiting on critical section
+	P-> adding 4 to buffer
+... P Leaving Critial from store mem
+exiting process p
+C is waiting on critical section
+	C-> printing: 3
+...C Leaving Critical
+C is waiting on critical section
+	C-> printing: 4
+...C Leaving Critical
+exiting process c
+```
+###Explanation
+Both examples have the producer run first but the clear differnece between the two was the order in which they accessed their critical sections. In both examples, the producer was able to access the critical sections twice in a row, but in the first example, the consumer was also able to has two critical sections in a row. In the second example, the conumser was not able to get two critical sections in a row until the producer program finished. With this implemtation of the semaphores, the order of which process accesses their critical sections can change. The only exseption to this is the producer's initization critical section, which allows goes first.
