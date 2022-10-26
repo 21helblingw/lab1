@@ -114,5 +114,5 @@ C is waiting on critical section
 ...C Leaving Critical
 exiting process c
 ```
-###Explanation
+### Explanation
 Both examples have the producer run first but the clear differnece between the two was the order in which they accessed their critical sections. In both examples, the producer was able to access the critical sections twice in a row, but in the first example, the consumer was also able to has two critical sections in a row. In the second example, the conumser was not able to get two critical sections in a row until the producer program finished. With this implemtation of the semaphores, the order of which process accesses their critical sections can change. The only exseption to this is the producer's initization critical section, which allows goes first.
