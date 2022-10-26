@@ -33,6 +33,8 @@ The producer has two different goals in its critical section. The first is to in
 After the consumer connects to the shared memory, it waits on the semaphore, which is only set to 1 after the producer goes through its initialization critical section. The consumer only has one critical section, which consists of two parts. If the buffer is empty, it sleeps for a small time, then leaves the critical section. This allows for the producer to add items to the buffer. If there are items in the buffer, it removes it from the buffer and replaces it with a zero. It also increments the out variable. to point to the next position and decrements the buffer count variable. After that it leaves the critical section.
 ### Issues
 A drawback to this implementation is that the producer has to run first in order to initialize the semaphore. If the consumer runs first, then it will wait on a semaphore that has not been initialized yet. 
+### Print Statements
+Both processes print to the console when the process starts, when they are waiting on their critical section, leaving their critical section, and the process is exiting. They producer also prints what it is adding to the buffer and the consumer prints the item that it consumed from the buffer. Leaving critical statements always start with "..." and prints from within a critical sections start with either a P or C followed by a ->, depending on if it is the producer or consumer. For example, if the producer is in a critical section, the print will start with "P-> ".
 ## Examples
 ### Example 1:
 ```code
@@ -112,5 +114,5 @@ C is waiting on critical section
 ...C Leaving Critical
 exiting process c
 ```
-Explanation
+###Explanation
 Both examples have the producer run first but the clear differnece between the two was the order in which they accessed their critical sections. In both examples, the producer was able to access the critical sections twice in a row, but in the first example, the consumer was also able to has two critical sections in a row. In the second example, the conumser was not able to get two critical sections in a row until the producer program finished. With this implemtation of the semaphores, the order of which process accesses their critical sections can change. The only exseption to this is the producer's initization critical section, which allows goes first.
