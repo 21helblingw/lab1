@@ -66,6 +66,7 @@ int main(){
             printf("\tP-> buffer value %zu\n",shm_map->buffer );
             ++counter;
         }
+        // buffer is full
         else{
             print("\tP-> Buffer is full\n");
         }

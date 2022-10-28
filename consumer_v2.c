@@ -43,7 +43,7 @@ int main(){
         // in critial section
 
         // if the buffer is not empty or full
-        // consume and print an tiem in the buffer and replace it with 0
+        // consume and print an item in the buffer and replace it with 0
         // decrease the buffer item counter and increase the out so it points to the next possible full item
         if(shm_map->buffer > 0 && shm_map->buffer < 3){
             int temp = shm_map->buf[shm_map->out % 2];
@@ -53,11 +53,12 @@ int main(){
             --shm_map->buffer;
             ++counter;
         }
+        // buffer is empty
         else{
             printf("\tC-> nothing to consume\n");
         }
         printf("...C Leaving Critial\n");
-        sem_post(&shm_map->sem_pro); // tels the producer that it can enter its critical section
+        sem_post(&shm_map->sem_pro); // tells the producer that it can enter its critical section
     }
 
     shm_unlink("/sharedMem");
