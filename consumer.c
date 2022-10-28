@@ -15,9 +15,9 @@ struct buffer {
 
 };
 int main(){
-    sleep(1);
+    sleep(1); // makes sure that the producer runs first
     printf("starting process C\n");
-    // creates or opens the shared memory location and returns the file discripter for the shared memory
+    // opens the shared memory location and returns the file discripter for the shared memory
     int fd = shm_open("/sharedMem",O_RDWR , S_IRUSR | S_IWUSR);
     // checks to make sure the fd is created properly
     if (fd == -1) printf("FAILED FD\n");
@@ -34,7 +34,6 @@ int main(){
 
     
     int counter = 0;
-    int flag = 0;
     while(counter < 5){
         // allows for the two processes to take turns in thir critial sections
         sleep(1);
@@ -57,12 +56,10 @@ int main(){
         }
         else{
             // if the buffer is empty, wait a while and check again
-            //sleep(1);
             printf("\tC-> nothing to consume\n");
-            ++flag;
         }
         printf("...C Leaving Critical\n");
-        sem_post(&shm_map->sem);
+        sem_post(&shm_map->sem); // consumer leaves critical section and changes to the value to 1
     }
 
     shm_unlink("/sharedMem");

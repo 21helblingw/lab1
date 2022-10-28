@@ -53,17 +53,16 @@ int main(){
     sem_post(&shm_map->sem);
 
     int counter = 0;
-    int flag = 0;
     while(counter < 5){
         // allows for the two processes to take turns in thir critical sections
         sleep(1);
         printf("P is waiting on critical section\n");
-        sem_wait(&shm_map->sem);
+        sem_wait(&shm_map->sem); // waits unitl it can access the critical section
         //in critical section
 
         // if there is space in the buffer
         // adds the counter into the buffer in shared memory
-        // increses the buffer size and the in increases to point to the next free spot
+        // increses the buffer size, coutner, and the in increases to point to the next free spot
         if(shm_map->buffer < 2){
             printf("\tP-> adding %d", counter);
             printf(" to buffer\n");
@@ -74,9 +73,7 @@ int main(){
         }
         else{
             // if the buffer is full, wait and check back later
-            //sleep(1);
             printf("\tP-> Buffer is full\n");
-            ++flag;
         }
     printf("... P Leaving Critial from store mem\n");
     sem_post(&shm_map->sem); //producer leaving critical section
