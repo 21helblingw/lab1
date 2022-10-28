@@ -52,7 +52,6 @@ int main(){
 
     int counter = 0;
     for(int i = 0; i < 5; ++i){
-        sleep(1);
         printf("P is waiting on critial section\n");
         sem_wait(&shm_map->sem_pro);
         //in critial section
