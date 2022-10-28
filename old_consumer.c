@@ -21,7 +21,7 @@ int main(){
     sleep(1);
     printf("starting process C\n");
 
-    int fd = shm_open("/sharedMem",O_CREAT | O_RDWR , S_IRUSR | S_IWUSR);
+    int fd = shm_open("/sharedMem",O_RDWR , S_IRUSR | S_IWUSR);
     if (fd == -1) printf("FAILED FD\n");
 
     if(ftruncate(fd, sizeof(struct buffer)) == -1) printf("FAILED TRUNCATE\n");
