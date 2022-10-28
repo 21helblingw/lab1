@@ -39,78 +39,78 @@ Both processes print to the console when the process starts, when they are waiti
 ### Example 1:
 ```code
 starting process P
-P in critical to start and initialize variables
+P in Critial to start and init variables
 ... P Leaving Critial from start
-P is waiting on critical section
+P is waiting on critial section
 	P-> adding 0 to buffer
 ... P Leaving Critial from store mem
+P is waiting on critial section
 starting process C
-P is waiting on critical section
+C is waiting on critial section
+	C-> printing: 0
+...C Leaving Critial
+C is waiting on critial section
 	P-> adding 1 to buffer
 ... P Leaving Critial from store mem
-C is waiting on critical section
-	C-> printing: 0
-...C Leaving Critical
-C is waiting on critical section
+P is waiting on critial section
 	C-> printing: 1
-...C Leaving Critical
-P is waiting on critical section
+...C Leaving Critial
+C is waiting on critial section
 	P-> adding 2 to buffer
 ... P Leaving Critial from store mem
-C is waiting on critical section
+P is waiting on critial section
 	C-> printing: 2
-...C Leaving Critical
-P is waiting on critical section
+...C Leaving Critial
+C is waiting on critial section
 	P-> adding 3 to buffer
 ... P Leaving Critial from store mem
-C is waiting on critical section
+P is waiting on critial section
 	C-> printing: 3
-...C Leaving Critical
-P is waiting on critical section
+...C Leaving Critial
+C is waiting on critial section
 	P-> adding 4 to buffer
 ... P Leaving Critial from store mem
 exiting process p
-C is waiting on critical section
 	C-> printing: 4
-...C Leaving Critical
+...C Leaving Critial
 exiting process c
 ```
 ### Example 2:
 ```code
 starting process P
-P in critical to start and initialize variables
+P in Critial to start and init variables
 ... P Leaving Critial from start
-P is waiting on critical section
+P is waiting on critial section
 	P-> adding 0 to buffer
 ... P Leaving Critial from store mem
+P is waiting on critial section
 starting process C
-P is waiting on critical section
-C is waiting on critical section
+C is waiting on critial section
+	C-> printing: 0
+...C Leaving Critial
+C is waiting on critial section
 	P-> adding 1 to buffer
 ... P Leaving Critial from store mem
-	C-> printing: 0
-...C Leaving Critical
-P is waiting on critical section
+P is waiting on critial section
+	C-> printing: 1
+...C Leaving Critial
+C is waiting on critial section
 	P-> adding 2 to buffer
 ... P Leaving Critial from store mem
-C is waiting on critical section
-	C-> printing: 1
-...C Leaving Critical
-P is waiting on critical section
+P is waiting on critial section
+	C-> printing: 2
+...C Leaving Critial
+C is waiting on critial section
 	P-> adding 3 to buffer
 ... P Leaving Critial from store mem
-C is waiting on critical section
-	C-> printing: 2
-...C Leaving Critical
-P is waiting on critical section
+P is waiting on critial section
+	C-> printing: 3
+...C Leaving Critial
+C is waiting on critial section
 	P-> adding 4 to buffer
 ... P Leaving Critial from store mem
 exiting process p
-C is waiting on critical section
-	C-> printing: 3
-...C Leaving Critical
-C is waiting on critical section
 	C-> printing: 4
-...C Leaving Critical
+...C Leaving Critial
 exiting process c
 ```

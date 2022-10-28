@@ -63,12 +63,11 @@ int main(){
             shm_map->buf[shm_map->in % 2] = counter;
             ++shm_map->in;
             ++shm_map->buffer;
-            printf("\tP-> buffer value %zu\n",shm_map->buffer );
             ++counter;
         }
         // buffer is full
         else{
-            print("\tP-> Buffer is full\n");
+            printf("\tP-> Buffer is full\n");
         }
     printf("... P Leaving Critial from store mem\n");
     sem_post(&shm_map->sem_con); // tells the consumer that there are items in buffer
