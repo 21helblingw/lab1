@@ -8,44 +8,43 @@
 #include <stdlib.h>
 
 struct buffer {
-    sem_t sem_pro;
-    sem_t sem_con;
-    size_t in;
-    size_t out;
-    size_t buffer;
-    int buf[2];
+    sem_t sem_pro; // semaphore for producer
+    sem_t sem_con; // semaphore for consumer
+    size_t in; // points to the first empty space in buffer
+    size_t out; // points to the first full space in buffer
+    size_t buffer; // amount of items in the buffer
+    int buf[2]; // array to hold the items (can only hold 2)
 
 };
 
 int main(){
+    // makes sure that the producer runs first
     sleep(1);
     printf("starting process C\n");
-
+    // opens the shared memory location and returns the file discripter for the shared memory
     int fd = shm_open("/sharedMem",O_RDWR , S_IRUSR | S_IWUSR);
     if (fd == -1) printf("FAILED FD\n");
-
+    // checks to make sure the fd is created properly
     if(ftruncate(fd, sizeof(struct buffer)) == -1) printf("FAILED TRUNCATE\n");
-    //printf("C: created the fd\n");
-
+    
+    // maps shm_map, which is the buffer structure, to the shared memory
     struct buffer *shm_map = mmap(NULL, sizeof(*shm_map), PROT_READ | PROT_WRITE, MAP_SHARED, fd,0);
-    //printf("C: created the buffer map\n");
+    // checks to make sure the mapping worked
     if(shm_map == MAP_FAILED){
         printf("FAILED MAPPING\n");
         exit(1);
     }
 
-     // set to 0, waits for the producer to go first
-    //printf("C: created the sem_con\n");
-    // tells the producer that it is ready to start consuming
+    
     int counter = 0;
-    int flag = 0;
-    while(counter < 5 && flag < 10){
+    while(counter < 5){
         printf("C is waiting on critial section\n");
-        sem_wait(&shm_map->sem_con);
+        sem_wait(&shm_map->sem_con);  // waits until it can access the shared memory(producer has finsihed its critical section)
         // in critial section
-        printf("C in Critial\n");
 
-
+        // if the buffer is not empty or full
+        // consume and print an tiem in the buffer and replace it with 0
+        // decrease the buffer item counter and increase the out so it points to the next possible full item
         if(shm_map->buffer > 0 && shm_map->buffer < 3){
             int temp = shm_map->buf[shm_map->out % 2];
             shm_map->buf[shm_map->out % 2] = 0;
@@ -56,10 +55,9 @@ int main(){
         }
         else{
             printf("\tC-> nothing to consume\n");
-            ++flag;
         }
         printf("...C Leaving Critial\n");
-        sem_post(&shm_map->sem_pro);
+        sem_post(&shm_map->sem_pro); // tels the producer that it can enter its critical section
     }
 
     shm_unlink("/sharedMem");

@@ -8,39 +8,37 @@
 #include <stdlib.h>
 
 struct buffer {
-    sem_t sem_pro;
-    sem_t sem_con;
-    size_t in;
-    size_t out;
-    size_t buffer;
-    int buf[2];
+    sem_t sem_pro; // semaphore for producer
+    sem_t sem_con; // semaphore for consumer
+    size_t in; // points to the first empty space in buffer
+    size_t out; // points to the first full space in buffer
+    size_t buffer; // amount of items in the buffer
+    int buf[2]; // array to hold the items (can only hold 2)
 
 };
 
 int main(){
     printf("starting process P\n");
-
+    // creates the shared memory location and returns the file discripter for the shared memory
     int fd = shm_open("/sharedMem",O_CREAT | O_RDWR , S_IRUSR | S_IWUSR);
     if (fd == -1) printf("FAILED FD\n");
-
+    // checks to make sure the fd is created properly
     if(ftruncate(fd, sizeof(struct buffer)) == -1) printf("FAILED TRUNCATE\n");
-   //printf("P: created the fd\n");
-
+   
+    // maps shm_map, which is the buffer structure, to the shared memory
     struct buffer *shm_map = mmap(NULL, sizeof(*shm_map), PROT_READ | PROT_WRITE, MAP_SHARED, fd,0);
-    //printf("P: created the buffer map\n");
+    // checks to make sure the mapping worked
     if(shm_map == MAP_FAILED){
         printf("FAILED MAPPING\n");
         exit(1);
     }
-    // creates the two semaphores for the processes.
-    //producer will always to to CS first.
+    // creates the two semaphores for the processes, both set to 0.
     sem_init(&shm_map->sem_pro, 1, 0);
-    sem_init(&shm_map->sem_con, 1, 0); // set to 0, waits for the consumer to connect to mem
-    //printf("P: created the sem_pro\n");
+    sem_init(&shm_map->sem_con, 1, 0); 
     
 
-    // waits until the consmuer maps to the shared memory and inits its sem_con
-    //in critial section
+    // first critical section to init varaibles
+    // this also posts the producer semaphore, allowing it to start producing
     printf("P in Critial to start and init variables\n");
 
     shm_map->in = 0;
@@ -48,16 +46,17 @@ int main(){
     shm_map->buffer=0; // amout of items in array
 
     printf("... P Leaving Critial from start\n");
-    sem_post(&shm_map->sem_pro); // tells the consumer that it can use shared mem
+    sem_post(&shm_map->sem_pro); // tells the producer that it can use shared mem to produce items
 
     int counter = 0;
-    for(int i = 0; i < 5; ++i){
+    while (counter < 5){
         printf("P is waiting on critial section\n");
-        sem_wait(&shm_map->sem_pro);
+        sem_wait(&shm_map->sem_pro); // waits until it can access the shared memory(consumer has finsihed its critical section)
         //in critial section
-        printf("P in Critial to store in mem\n");
 
         // if there is space in the buffer
+        // adds the coutner to the buffer in shared memory
+        // increases the buffer size, in , and coutner by one. it in points to the next free spot
         if(shm_map->buffer < 2){
             printf("\tP-> adding %d", counter);
             printf(" to buffer\n");
@@ -66,6 +65,9 @@ int main(){
             ++shm_map->buffer;
             printf("\tP-> buffer value %zu\n",shm_map->buffer );
             ++counter;
+        }
+        else{
+            print("\tP-> Buffer is full\n");
         }
     printf("... P Leaving Critial from store mem\n");
     sem_post(&shm_map->sem_con); // tells the consumer that there are items in buffer
