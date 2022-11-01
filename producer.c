@@ -48,7 +48,7 @@ int main(){
     shm_map->out = 0;
     shm_map->buffer=0; 
 
-    printf("... P Leaving Critial from start\n");
+    printf("... P Leaving Critical from start\n");
     // tells the consumer that it can use shared mem or allows the the producer to go in its critical section again
     sem_post(&shm_map->sem);
 
@@ -75,7 +75,7 @@ int main(){
             // if the buffer is full, wait and check back later
             printf("\tP-> Buffer is full\n");
         }
-    printf("... P Leaving Critial\n");
+    printf("... P Leaving Critcial\n");
     sem_post(&shm_map->sem); //producer leaving critical section
     
     }
