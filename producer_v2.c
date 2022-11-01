@@ -39,18 +39,18 @@ int main(){
 
     // first critical section to init varaibles
     // this also posts the producer semaphore, allowing it to start producing
-    printf("P in Critial to start and init variables\n");
+    printf("P in Critical to start and init variables\n");
 
     shm_map->in = 0;
     shm_map->out = 0;
     shm_map->buffer=0; // amout of items in array
 
-    printf("... P Leaving Critial from start\n");
+    printf("... P Leaving Critical from start\n");
     sem_post(&shm_map->sem_pro); // tells the producer that it can use shared mem to produce items
 
     int counter = 0;
     while (counter < 5){
-        printf("P is waiting on critial section\n");
+        printf("P is waiting on critical section\n");
         sem_wait(&shm_map->sem_pro); // waits until it can access the shared memory(consumer has finsihed its critical section)
         //in critial section
 
@@ -69,7 +69,7 @@ int main(){
         else{
             printf("\tP-> Buffer is full\n");
         }
-    printf("... P Leaving Critial from store mem\n");
+    printf("... P Leaving Critical from store mem\n");
     sem_post(&shm_map->sem_con); // tells the consumer that there are items in buffer
     }
 

@@ -38,7 +38,7 @@ int main(){
     
     int counter = 0;
     while(counter < 5){
-        printf("C is waiting on critial section\n");
+        printf("C is waiting on critical section\n");
         sem_wait(&shm_map->sem_con);  // waits until it can access the shared memory(producer has finsihed its critical section)
         // in critial section
 
@@ -57,7 +57,7 @@ int main(){
         else{
             printf("\tC-> nothing to consume\n");
         }
-        printf("...C Leaving Critial\n");
+        printf("...C Leaving Critical\n");
         sem_post(&shm_map->sem_pro); // tells the producer that it can enter its critical section
     }
 
