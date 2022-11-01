@@ -75,7 +75,7 @@ int main(){
             // if the buffer is full, wait and check back later
             printf("\tP-> Buffer is full\n");
         }
-    printf("... P Leaving Critial from store mem\n");
+    printf("... P Leaving Critial\n");
     sem_post(&shm_map->sem); //producer leaving critical section
     
     }
