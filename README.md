@@ -43,11 +43,11 @@ P in critical to start and initialize variables
 ... P Leaving Critical from start
 P is waiting on critical section
 	P-> adding 0 to buffer
-... P Leaving Critical from store mem
+... P Leaving Critical
 starting process C
 P is waiting on critical section
 	P-> adding 1 to buffer
-... P Leaving Critical from store mem
+... P Leaving Critical
 C is waiting on critical section
 	C-> printing: 0
 ...C Leaving Critical
@@ -56,19 +56,19 @@ C is waiting on critical section
 ...C Leaving Critical
 P is waiting on critical section
 	P-> adding 2 to buffer
-... P Leaving Critical from store mem
+... P Leaving Critical
 C is waiting on critical section
 	C-> printing: 2
 ...C Leaving Critical
 P is waiting on critical section
 	P-> adding 3 to buffer
-... P Leaving Critical from store mem
+... P Leaving Critical
 C is waiting on critical section
 	C-> printing: 3
 ...C Leaving Critical
 P is waiting on critical section
 	P-> adding 4 to buffer
-... P Leaving Critical from store mem
+... P Leaving Critical
 exiting process p
 C is waiting on critical section
 	C-> printing: 4
@@ -82,29 +82,29 @@ P in critical to start and initialize variables
 ... P Leaving Critical from start
 P is waiting on critical section
 	P-> adding 0 to buffer
-... P Leaving Critical from store mem
+... P Leaving Critical
 starting process C
 P is waiting on critical section
 C is waiting on critical section
 	P-> adding 1 to buffer
-... P Leaving Critical from store mem
+... P Leaving Critical
 	C-> printing: 0
 ...C Leaving Critical
 P is waiting on critical section
 	P-> adding 2 to buffer
-... P Leaving Critical from store mem
+... P Leaving Critical
 C is waiting on critical section
 	C-> printing: 1
 ...C Leaving Critical
 P is waiting on critical section
 	P-> adding 3 to buffer
-... P Leaving Critical from store mem
+... P Leaving Critical
 C is waiting on critical section
 	C-> printing: 2
 ...C Leaving Critical
 P is waiting on critical section
 	P-> adding 4 to buffer
-... P Leaving Critical from store mem
+... P Leaving Critical
 exiting process p
 C is waiting on critical section
 	C-> printing: 3
