@@ -17,9 +17,9 @@ sudo apt install build-essential
 
 ## Usage
 ```bash
-gcc producer.c -pthread -lrt -o producer
-gcc consumer.c -pthread -lrt -o consumer
-./producer & ./consumer &
+gcc producer_v2.c -pthread -lrt -o producer_v2
+gcc consumer_v2.c -pthread -lrt -o consumer_v2
+./producer_v2 & ./consumer_v2 &
 ```
 ## Documentation
 ### Shared Memory
